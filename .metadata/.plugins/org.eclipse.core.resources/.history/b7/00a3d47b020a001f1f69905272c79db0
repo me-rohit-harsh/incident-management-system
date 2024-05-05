@@ -1,0 +1,5 @@
+package in.rapifuzz.incident.services;
+
+public class UserService {
+
+}

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome CSS (optional) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <style>
+        .nav {
+            background-color: #18272F;
+            color: #fff;
+            height: 50px;
+            width: 100%;
+            position: relative;
+        }
+
+        .nav-head {
+            display: inline-block;
+        }
+
+        .nav-title {
+            display: inline-block;
+            font-size: 22px;
+            padding: 5px 10px;
+        }
+
+        .nav-buttons {
+            display: none;
+        }
+
+        #nav-check {
+            display: none;
+        }
+
+        .nav-links {
+            display: inline-block;
+            padding: 10px;
+            float: right;
+            /* Move .nav-links to the right */
+        }
+
+        .nav-links a {
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+
+        .nav-links a:hover {
+            color: #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                float: none;
+                height: 0px;
+                background-color: #1B2B34;
+                position: absolute;
+                top: 50px;
+                right: 0;
+                /* Align to the right */
+                width: auto;
+                /* Adjust width to fit content */
+            }
+
+            .nav-links a {
+                display: block;
+                width: 100%;
+                padding: 10px 20px;
+            }
+
+            .nav-buttons {
+                display: inline-block;
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .nav-buttons label {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+            }
+
+            .nav-buttons label:hover {
+                background-color: gray;
+            }
+
+            .nav-buttons span {
+                background-color: #fff;
+                display: block;
+                height: 3px;
+                margin: 5px auto 0 auto;
+                width: 25px;
+            }
+
+            .nav #nav-check:not(:checked)+.nav-links {
+                display: none !important;
+            }
+
+            .nav #nav-check:checked+.nav-links {
+                display: block;
+                height: auto;
+                overflow-y: auto;
+            }
+        }
+    </style>
+    <style>
+        /* Custom CSS for Polling page */
+
+        .card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-check-input {
+            margin-top: 6px;
+        }
+
+        .form-check-label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-primary i {
+            margin-left: 5px;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        /* Hover effect on form-check-label */
+        .form-check-label:hover {
+            cursor: pointer;
+            color: #0056b3;
+        }
+
+        /* Hover effect on button */
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav" style="z-index: 100">
+        <div class="nav-head">
+            <div class="nav-title">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Bharatiya_Janata_Party_logo.svg/1200px-Bharatiya_Janata_Party_logo.svg.png"
+                    width="50" height="50" alt="">
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+        <input type="checkbox" id="nav-check">
+        <div class="nav-links d-inline  float-right">
+            <a class=" btn-outline-secondary" href="{{route('admin.dashboard')}}" type="button">
+                <i class="fa-solid fa-gauge p-2"></i>Dashboard
+            </a>
+            <a class=" btn-outline-secondary" href="{{route('cabinet.index')}}" type="button">
+                <i class="fa-solid fa-list p-2"></i>Party List
+            </a>
+            <a class=" btn-outline-secondary" href="{{route('cabinet.create')}}" type="button">
+                <i class="fa-solid fa-users-gear p-2"></i> Add Party
+            </a>
+            <a class=" btn-outline-secondary" href="{{route('admin.logout')}}" type="button">
+                <i class="fas fa-sign-out-alt p-2"></i> Logout
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Your HTML content here -->
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <!-- Form to add cabinet details -->
+                <!-- @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+                @endif -->
+                <div class="col-md-6">
+                    <div class="card shadow my-3 p-0">
+                        <div class="card-header">
+                            <strong>Add Party in the List</strong>
+                        </div>
+                        <form action="{{ route('cabinet.store') }}" method="post" class="p-3">
+                            @csrf
+                            <div class="mb-3 form-group">
+                                <label for="party" class="form-label">Party Name</label>
+                                <input type="text" class="form-control" id="party" name="party"
+                                    placeholder="Enter party name">
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="cabinet" class="form-label">Cabinet Name</label>
+                                <input type="text" class="form-control" id="cabinet" name="cabinet"
+                                    placeholder="Enter cabinet name">
+                            </div>
+                            {{-- <div class="mb-3 form-group">
+                                <label for="logo" class="form-label">Party Logo</label>
+                                <input type="file" class="form-control" id="logo" name="logo"
+                                    onchange="checkFileSize(this)">
+                                <div id="fileSizeError" class="text-danger" style="display: none;">Maximum file size
+                                    allowed is
+                                    2MB.</div>
+                            </div>
+
+                            <script>
+                                function checkFileSize(input) {
+                                    if (input.files.length > 0) {
+                                        var fileSize = input.files[0].size; // Size in bytes
+                                        var maxSize = 2 * 1024 * 1024; // 2MB in bytes
+                                        if (fileSize > maxSize) {
+                                            // Show error message
+                                            document.getElementById('fileSizeError').style.display = 'block';
+                                            // Clear the file input
+                                            input.value = '';
+                                        } else {
+                                            // Hide error message
+                                            document.getElementById('fileSizeError').style.display = 'none';
+                                        }
+                                    }
+                                }
+                            </script> --}}
+                            <!-- Add other fields for cabinet details here -->
+                            <button type="submit" class="btn btn-success"><i
+                                    class="fa-solid fa-floppy-disk px-2"></i>Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

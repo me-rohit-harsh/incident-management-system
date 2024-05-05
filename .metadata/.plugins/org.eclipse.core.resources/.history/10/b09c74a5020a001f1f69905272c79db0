@@ -1,0 +1,12 @@
+package in.rapifuzz.incident.services;
+
+import in.rapifuzz.incident.model.User;
+
+public class UserService {
+
+	public boolean save(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

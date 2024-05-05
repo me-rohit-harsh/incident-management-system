@@ -1,0 +1,145 @@
+package in.rapifuzz.incident.model;
+
+import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+
+
+
+@Entity
+@Table(name = "incidents")
+public class Incident {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    private String incidentID;
+    private String identify;
+    private String details;
+    private Date reportedDate;
+    private String priority;
+    private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
+	public Incident() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	public String getIncidentID() {
+		return incidentID;
+	}
+
+
+	public void setIncidentID(String incidentID) {
+		this.incidentID = incidentID;
+	}
+
+
+	public String getIdentify() {
+		return identify;
+	}
+
+
+	public void setIdentify(String identify) {
+		this.identify = identify;
+	}
+
+
+	public String getDetails() {
+		return details;
+	}
+
+
+	public void setDetails(String details) {
+		this.details = details;
+	}
+
+
+	public Date getReportedDate() {
+		return reportedDate;
+	}
+
+
+	public void setReportedDate(Date reportedDate) {
+		this.reportedDate = reportedDate;
+	}
+
+
+	public String getPriority() {
+		return priority;
+	}
+
+
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Incident [id=" + id + ", incidentID=" + incidentID + ", identify=" + identify + ", details=" + details
+				+ ", reportedDate=" + reportedDate + ", priority=" + priority + ", status=" + status + ", user=" + user
+				+ "]";
+	}
+
+
+	public Incident(String id, String incidentID, String identify, String details, Date reportedDate, String priority,
+			String status, User user) {
+		super();
+		this.id = id;
+		this.incidentID = incidentID;
+		this.identify = identify;
+		this.details = details;
+		this.reportedDate = reportedDate;
+		this.priority = priority;
+		this.status = status;
+		this.user = user;
+	}
+	
+	
+
+
+}

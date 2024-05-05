@@ -1,0 +1,28 @@
+package in.rapifuzz.incident.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import in.rapifuzz.incident.model.Incident;
+import in.rapifuzz.incident.repository.IncidentRepository;
+
+
+@Controller
+public class AdminController {
+
+	 @Autowired
+	    private IncidentRepository incidentRepository;
+
+	    @GetMapping("/admindashboard")
+	    public String adminDashboard(Model model) {
+	        List<Incident> incidents = incidentRepository.findAll();  // Fetch all incidents
+	        model.addAttribute("incidents", incidents);
+	        return "extra";  // Return the view for the admin dashboard
+	    }
+	
+	
+}

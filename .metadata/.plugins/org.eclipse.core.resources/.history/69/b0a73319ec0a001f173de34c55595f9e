@@ -1,0 +1,126 @@
+package in.rapifuzz.incident.model;
+
+import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+
+
+
+@Entity
+@Table(name = "incidents")
+public class Incident {
+    @Id
+    private String  id;
+    private Long userId;
+    private String identify;
+    private String details;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date reportedDate;
+    private String priority;
+    private String status;
+
+   
+	
+	public Incident(String id, Long userId, String identify, String details, Date reportedDate, String priority,
+			String status) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.identify = identify;
+		this.details = details;
+		this.reportedDate = reportedDate;
+		this.priority = priority;
+		this.status = status;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Incident [id=" + id + ", userId=" + userId + ", identify=" + identify + ", details=" + details
+				+ ", reportedDate=" + reportedDate + ", priority=" + priority + ", status=" + status + "]";
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	public Long getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+
+	public String getIdentify() {
+		return identify;
+	}
+
+
+	public void setIdentify(String identify) {
+		this.identify = identify;
+	}
+
+
+	public String getDetails() {
+		return details;
+	}
+
+
+	public void setDetails(String details) {
+		this.details = details;
+	}
+
+
+	public Date getReportedDate() {
+		return reportedDate;
+	}
+
+
+	public void setReportedDate(Date reportedDate) {
+		this.reportedDate = reportedDate;
+	}
+
+
+	public String getPriority() {
+		return priority;
+	}
+
+
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public Incident() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+}

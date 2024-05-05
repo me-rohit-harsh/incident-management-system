@@ -1,0 +1,17 @@
+package in.rapifuzz.incident.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import in.rapifuzz.incident.model.User;
+import in.rapifuzz.incident.repository.UserRepository;
+
+public class UserService {
+
+	@Autowired
+	private UserRepository userRepository;
+	public boolean save(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

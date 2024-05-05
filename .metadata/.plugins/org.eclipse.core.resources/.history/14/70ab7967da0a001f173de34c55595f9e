@@ -1,0 +1,19 @@
+package in.rapifuzz.incident.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import in.rapifuzz.incident.model.Incident;
+
+@Repository
+public interface IncidentRepository extends JpaRepository<Incident, Long> {
+	Optional<Incident> findByIdAndUserId(Long id, Long userId);
+
+	List<Incident> findByUserId(Long userId);
+
+    Optional<Incident> findByDetails(String details);
+
+}

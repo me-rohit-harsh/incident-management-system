@@ -1,0 +1,40 @@
+package in.rapifuzz.incident.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import in.rapifuzz.incident.model.Incident;
+import in.rapifuzz.incident.repository.IncidentRepository;
+import in.rapifuzz.incident.repository.UserRepository;
+
+@Controller
+public class AdminController {
+
+    @Autowired
+    private IncidentRepository incidentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/admindashboard")
+    public String adminDashboard(Model model) {
+        List<Incident> incidents = incidentRepository.findAll();
+        Map<Long, String> userNames = new HashMap<>();
+
+        incidents.forEach(incident -> {
+            userRepository.findById(incident.getUserId()).ifPresent(user -> {
+                userNames.put(incident.getId(), user.getUsername());  // Map incident ID to user's name
+            });
+        });
+
+        model.addAttribute("incidents", incidents);
+        model.addAttribute("userNames", userNames);  // Pass user names mapped by incident ID
+        return "adminDashboard";  // Name of the Thymeleaf template
+    }
+}

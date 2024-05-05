@@ -1,0 +1,40 @@
+package in.rapifuzz.incident.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import in.rapifuzz.incident.model.Incident;
+import in.rapifuzz.incident.model.User;
+import in.rapifuzz.incident.repository.IncidentRepository;
+import in.rapifuzz.incident.repository.UserRepository;
+
+@Controller
+public class AdminController {
+
+	@Autowired
+	private IncidentRepository incidentRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	@GetMapping("/admindashboard")
+	public String adminDashboard(Model model) {
+	    List<Incident> incidents = incidentRepository.findAll();
+	    Map<Long, User> userMap = new HashMap<>();
+	    
+	    // Pre-fetch all users associated with the incidents
+	    incidents.forEach(incident -> {
+	        userRepository.findById(incident.getUserId()).ifPresent(user -> userMap.put(incident.getUserId(), user));
+	    });
+
+	    model.addAttribute("incidents", incidents);
+	    model.addAttribute("userMap", userMap);  // Map of userId to User
+	    return "extra";
+	}
+
+}

@@ -1,0 +1,12 @@
+package in.rapifuzz.incident.services;
+
+import in.rapifuzz.incident.model.User;
+
+
+public interface UserService {
+
+	
+	 User save(User user);
+	
+	
+}

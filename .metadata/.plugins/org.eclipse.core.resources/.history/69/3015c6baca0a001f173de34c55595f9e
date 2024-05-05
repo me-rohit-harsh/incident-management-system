@@ -1,0 +1,82 @@
+package in.rapifuzz.incident.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import in.rapifuzz.incident.model.User;
+import in.rapifuzz.incident.repository.UserRepository;
+import in.rapifuzz.incident.services.UserService;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class UserController {
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private UserRepository userRepository;
+
+//Registration form 
+	@GetMapping("/register")
+	public String showRegistrationForm(Model model) {
+		model.addAttribute("user", new User());
+		return "registration";
+	}
+
+//Save user 
+	@PostMapping("/register")
+	public String registerUserAccount(@ModelAttribute("user") User user, BindingResult result) {
+		if (result.hasErrors()) {
+			return "register"; // Return to the registration page if there are errors
+		}
+		System.out.println(user); // Log user to console to check data
+		userService.save(user);
+		return "redirect:/login";
+	}
+
+//Login form 	    
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	@PostMapping("/login")
+	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password,
+			RedirectAttributes redirectAttributes, HttpSession session) {
+		if(email.equals("admin@gmail.com")&&password.equals("admin")) {
+			return "redirect:/admindashboard";
+			
+		}else {
+			User user = userRepository.findByEmailAndPassword(email, password);
+			if (user != null) {
+				session.setAttribute("userId", user.getId());
+				redirectAttributes.addFlashAttribute("message", "Login successful!");
+				redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+				return "redirect:/dashboard"; // Assuming there's a home page to go to after login
+			} else {
+				redirectAttributes.addFlashAttribute("message", "Invalid email or password.");
+				redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+				return "redirect:/login";
+			}
+		}
+		
+		
+	}
+
+	@PostMapping("logout")
+	public String logoutUser(HttpSession session,RedirectAttributes redirectAttributes) {
+		session.removeAttribute("userId");
+		redirectAttributes.addFlashAttribute("message", "Logout successful!");
+		redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/login";
+
+	}
+
+}

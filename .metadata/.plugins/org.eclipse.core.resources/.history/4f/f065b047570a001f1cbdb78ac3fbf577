@@ -1,0 +1,19 @@
+package in.rapifuzz.incident.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import in.rapifuzz.incident.model.Incident;
+import in.rapifuzz.incident.repository.IncidentRepository;
+
+public class IncidentServiceImpl implements IncidentService{
+
+	@Autowired
+	private IncidentRepository incidentRepository;
+	
+	@Override
+	public Incident save(Incident incident) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

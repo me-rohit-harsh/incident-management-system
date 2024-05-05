@@ -1,0 +1,105 @@
+package in.rapifuzz.incident.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import in.rapifuzz.incident.model.Incident;
+import in.rapifuzz.incident.repository.IncidentRepository;
+import in.rapifuzz.incident.services.IncidentService;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class DashController {
+
+	@Autowired
+	private IncidentRepository incidentRepository;
+	@Autowired
+	private IncidentService incidentService;
+
+	@GetMapping("/dashboard")
+	public String showDashboard(HttpSession session, Model model,@RequestParam Optional<Long> incidentId) {
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		List<Incident> incidents = incidentRepository.findByUserId(userId);
+		model.addAttribute("incidents", incidents);
+		return "dashboard";
+
+	}
+
+	@PostMapping("addIncident")
+	public String addIncedent(@RequestParam("details") String details, @RequestParam("identify") String identify,
+			@RequestParam("priority") String priority, HttpSession session, RedirectAttributes redirectAttributes) {
+		Incident incident = new Incident();
+		incident.setDetails(details);
+		incident.setIdentify(identify);
+		incident.setPriority(priority);
+		incident.setStatus("Open");
+		incident.setUserId((Long) session.getAttribute("userId"));
+		redirectAttributes.addFlashAttribute("message", "Incident Added successful!");
+		redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		incidentRepository.save(incident);
+		return "redirect:/dashboard";
+	}
+
+	@GetMapping("/modifyincident/{id}")
+	public String showEditIncidentForm(@PathVariable Long id, HttpSession session, Model model,
+			RedirectAttributes redirectAttributes) {
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) {
+			// No user is logged in, redirect to the login page
+			redirectAttributes.addFlashAttribute("errorMessage", "You must be logged in to access this page.");
+			return "redirect:/login";
+		}
+
+		Optional<Incident> optionalIncident = incidentRepository.findById(id);
+		if (optionalIncident.isPresent()) {
+			Incident incident = optionalIncident.get();
+			if (incident.getUserId().equals(userId) && !incident.getStatus().equals("Closed")) {
+				// The incident belongs to the current user, add it to the model
+				model.addAttribute("incident", incident);
+				return "incedentList";
+			} else {
+				// The incident does not belong to the logged-in user
+				redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+				redirectAttributes.addFlashAttribute("message",
+						"You do not have permission to view or edit this incident.");
+				return "redirect:/dashboard";
+			}
+		} else {
+			// Incident not found
+			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+			redirectAttributes.addFlashAttribute("message", "Incident not found.");
+			return "redirect:/dashboard";
+		}
+	}
+
+	@PostMapping("/editIncident")
+	public String updateIncident(@ModelAttribute("incident") Incident incident, RedirectAttributes redirectAttributes,
+			HttpSession session) {
+		// Optionally, fetch the existing incident to ensure it's a valid update
+		Incident existingIncident = incidentRepository.findById(incident.getId()).orElse(null);
+		if (existingIncident != null) {
+			existingIncident.setDetails(incident.getDetails());
+			existingIncident.setIdentify(incident.getIdentify());
+			existingIncident.setPriority(incident.getPriority());
+			incidentRepository.save(existingIncident);
+			redirectAttributes.addFlashAttribute("successMessage", "Incident updated successfully!");
+		} else {
+			redirectAttributes.addFlashAttribute("errorMessage", "Incident not found!");
+		}
+		return "redirect:/dashboard";
+	}
+
+}

@@ -1,0 +1,7 @@
+package in.rapifuzz.incident.services;
+
+public interface IncidentService {
+
+	
+	
+}

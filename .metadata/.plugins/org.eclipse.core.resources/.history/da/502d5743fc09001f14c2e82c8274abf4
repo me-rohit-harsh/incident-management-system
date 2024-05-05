@@ -1,0 +1,5 @@
+package in.rapifuzz.incident.repository;
+
+public interface UserRepository {
+
+}

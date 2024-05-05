@@ -1,0 +1,49 @@
+package in.rapifuzz.incident.controller;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import in.rapifuzz.incident.model.Incident;
+import in.rapifuzz.incident.repository.IncidentRepository;
+import in.rapifuzz.incident.repository.UserRepository;
+
+@Controller
+public class AdminController {
+
+	@Autowired
+	private IncidentRepository incidentRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@GetMapping("/admindashboard")
+	public String adminDashboard(Model model) {
+		List<Incident> incidents = incidentRepository.findAll();
+		model.addAttribute("incidents", incidents);
+		return "extra";
+	}
+
+	@PostMapping("/updateStatus/{id}")
+	public ResponseEntity<?> updateIncidentStatus(@PathVariable Long id, @RequestBody Map<String, String> request) {
+		System.out.println("Attempting to update the status for ID " + id + " to " + request.get("status"));
+
+		return incidentRepository.findById(id).map(incident -> {
+			incident.setStatus(request.get("status"));
+			incidentRepository.save(incident);
+			System.out.println("ok ok");
+			return ResponseEntity.ok("Status updated successfully");
+			
+		}).orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+}

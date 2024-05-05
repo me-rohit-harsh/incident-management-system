@@ -1,0 +1,24 @@
+package in.rapifuzz.incident.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import in.rapifuzz.incident.model.User;
+import in.rapifuzz.incident.repository.UserRepository;
+
+@Service
+public class UserService {
+
+	@Autowired
+	private UserRepository userRepository;
+	public boolean save(User user) {
+	User save = userRepository.save(user);
+	if(save.equals(null)) {
+		return false;
+	}else {
+		return true;
+	}
+		
+	}
+
+}
