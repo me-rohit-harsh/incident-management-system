@@ -10,6 +10,7 @@
 <body>
 	<div class="container my-4">
 		<h2>User Details</h2>
+		<hr>
 		<div th:if="${user}">
 	
 			<div class="row">
@@ -37,12 +38,13 @@
 				</p>
 			</div>
 				</div>
+				<hr>
 			<h3>Incidents</h3>
 			<div th:if="${!incidents.isEmpty()}">
 				<table class="table">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<th>Incident ID</th>
 							<th>Details</th>
 							<th>Status</th>
 							<th>Priority</th>
@@ -53,8 +55,16 @@
 						<tr th:each="incident : ${incidents}">
 							<td th:text="${incident.id}">ID</td>
 							<td th:text="${incident.details}" style="width:20%">Details</td>
-							<td th:text="${incident.status}">Status</td>
-							<td th:text="${incident.priority}">Priority</td>
+						<td th:switch="${incident.status}">
+							<span th:case="'Open'" class="badge badge-primary" style="background-color: red;">Open</span>
+							<span th:case="'In progress'" class="badge badge-warning" style="background-color: blue; ">In progress</span>
+							<span th:case="'Closed'" class="badge badge-success" style="background-color: gray;">Closed</span>
+						</td>
+						<td th:switch="${incident.priority}">
+							<span th:case="'High'" class="badge" style="background-color: red;">High</span>
+							<span th:case="'Medium'" class="badge" style="background-color: blue; ">Medium</span>
+							<span th:case="'Low'" class="badge" style="background-color: gray;">Low</span>
+						</td>
 							<td
 								th:text="${#dates.format(incident.reportedDate, 'dd-MM-yyyy')}">Date</td>
 						</tr>
