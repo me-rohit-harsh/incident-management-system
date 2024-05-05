@@ -28,9 +28,9 @@
 					<button type="submit" class="btn btn-primary">
 						<i class="fa-solid fa-magnifying-glass"></i> Search
 					</button>
-					<button type="submit" class="btn btn-secondary">
+					<a href="/admindashboard" class="btn btn-secondary">
 						<i class="fa-solid fa-rotate"></i> Reset
-					</button>
+					</a>
 				</div>
 			</div>
 		</form>
@@ -49,7 +49,7 @@
 			<tbody>
 				<tr th:each="incident : ${incidents}">
 					<td th:text="${incident.id}"></td>
-					<td><a th:href="@{|/user/${incident.userId}|}" > <span th:text="${incident.userId}"></span>
+					<td><a th:href="@{|/user/${incident.userId}|}" > <span th:text="'#' + ${incident.userId}"></span>
 					</a></td>
 					<td th:text="${incident.details}" style="width:20%"></td>
 					<td><select class="form-control status-selector"
@@ -62,7 +62,12 @@
 							<option value="Closed"
 								th:selected="${incident.status == 'Closed'}">Closed</option>
 					</select></td>
-					<td th:text="${incident.priority}"></td>
+				
+					<td th:switch="${incident.priority}">
+						<span th:case="'High'" class="badge" style="background-color: red;">High</span>
+						<span th:case="'Medium'" class="badge" style="background-color: blue; ">Medium</span>
+						<span th:case="'Low'" class="badge" style="background-color: gray;">Low</span>
+					</td>
 					<td th:text="${incident.reportedDate}"></td>
 				</tr>
 
