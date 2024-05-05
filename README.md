@@ -100,7 +100,7 @@ https://github.com/me-rohit-harsh/incident-management-system.git
 
 ### Accessing the Application
 
-- Open your web browser and navigate to `http://localhost:3000` to access the frontend application.
+- Open your web browser and navigate to `http://localhost:8000` to access the frontend application.
 - Use Postman or any other API client to interact directly with the API.
 
 ## Contributing
