@@ -29,12 +29,11 @@ This repository contains a REST API and front-end for an Incident Management Sys
 ### Installing
 
 1. **Clone the repository**
-
+https://github.com/me-rohit-harsh/incident-management-system.git
 2. ## Usage
 
 ### API Endpoints
 
-# API Endpoints
 
 ## Registration Endpoints
 
